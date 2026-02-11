@@ -4,7 +4,7 @@ on:
   push:
     branches: [master, main]
     paths:
-      - 'packages/postcss-normalize-tool/**'
+      - '/**'
   workflow_dispatch:
 
 permissions:
@@ -32,9 +32,9 @@ jobs:
       - name: Copy static files
         run: |
           mkdir -p _site
-          cp packages/postcss-normalize-tool/demo-static.html _site/index.html
-          cp packages/postcss-normalize-tool/dist.js _site/
-          cp packages/postcss-normalize-tool/README.md _site/ 2>/dev/null || true
+          cp demo-static.html _site/index.html
+          cp dist.js _site/
+          cp README.md _site/ 2>/dev/null || true
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3

@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CSS Normalizer - Static Version</title>
+  <style>
+    :root {
+      --bg-primary: #0f172a;
+      --bg-secondary: #1e293b;
+      --bg-tertiary: #334155;
+      --text-primary: #f1f5f9;
+      --text-secondary: #cbd5e1;
+      --border-color: #475569;
+      --accent-color: #6366f1;
+      --accent-hover: #818cf8;
+      --success-color: #10b981;
+      --code-bg: #0d1117;
+      --code-text: #c9d1d9;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+      background-color: var(--bg-primary);
+      color: var(--text-primary);
+      line-height: 1.6;
+      min-height: 100vh;
+    }
+
+    .container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 2rem;
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+
+    h1 {
+      font-size: 2.5rem;
+      margin-bottom: 0.5rem;
+      background: linear-gradient(135deg, var(--accent-color), var(--accent-hover));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .subtitle {
+      color: var(--text-secondary);
+      font-size: 1.1rem;
+    }
+
+    .options {
+      display: flex;
+      gap: 1.5rem;
+      justify-content: center;
+      margin-bottom: 2rem;
+      flex-wrap: wrap;
+    }
+
+    .option-group {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .option-group input[type="checkbox"] {
+      width: 1.25rem;
+      height: 1.25rem;
+      accent-color: var(--accent-color);
+      cursor: pointer;
+    }
+
+    .option-group label {
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .ignore-input {
+      display: flex;
+      gap: 0.5rem;
+      align-items: center;
+    }
+
+    .ignore-input input {
+      background-color: var(--bg-secondary);
+      border: 1px solid var(--border-color);
+      border-radius: 0.5rem;
+      padding: 0.5rem 1rem;
+      color: var(--text-primary);
+      font-size: 0.9rem;
+      width: 200px;
+    }
+
+    .ignore-input input:focus {
+      outline: none;
+      border-color: var(--accent-color);
+    }
+
+    .editor-container {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+      margin-bottom: 2rem;
+    }
+
+    @media (max-width: 768px) {
+      .editor-container {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .editor {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+
+    .editor-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .editor-title {
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+
+    .editor-actions {
+      display: flex;
+      gap: 0.5rem;
+    }
+
+    .btn {
+      padding: 0.5rem 1rem;
+      border: none;
+      border-radius: 0.5rem;
+      cursor: pointer;
+      font-size: 0.875rem;
+      font-weight: 500;
+      transition: all 0.2s ease;
+    }
+
+    .btn-primary {
+      background-color: var(--accent-color);
+      color: white;
+    }
+
+    .btn-primary:hover {
+      background-color: var(--accent-hover);
+    }
+
+    .btn-secondary {
+      background-color: var(--bg-tertiary);
+      color: var(--text-primary);
+    }
+
+    .btn-secondary:hover {
+      background-color: var(--border-color);
+    }
+
+    .btn-copy {
+      background-color: var(--bg-tertiary);
+      color: var(--text-secondary);
+    }
+
+    .btn-copy:hover {
+      background-color: var(--border-color);
+      color: var(--text-primary);
+    }
+
+    textarea {
+      width: 100%;
+      min-height: 400px;
+      background-color: var(--code-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 0.75rem;
+      padding: 1rem;
+      color: var(--code-text);
+      font-family: 'Courier New', Courier, monospace;
+      font-size: 0.9rem;
+      resize: vertical;
+      line-height: 1.5;
+    }
+
+    textarea:focus {
+      outline: none;
+      border-color: var(--accent-color);
+    }
+
+    textarea::placeholder {
+      color: var(--text-secondary);
+      opacity: 0.5;
+    }
+
+    .stats {
+      display: flex;
+      gap: 2rem;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-bottom: 2rem;
+    }
+
+    .stat-item {
+      background-color: var(--bg-secondary);
+      padding: 1rem 1.5rem;
+      border-radius: 0.75rem;
+      text-align: center;
+      min-width: 180px;
+    }
+
+    .stat-label {
+      color: var(--text-secondary);
+      font-size: 0.875rem;
+      margin-bottom: 0.25rem;
+    }
+
+    .stat-value {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--accent-color);
+    }
+
+    footer {
+      text-align: center;
+      color: var(--text-secondary);
+      font-size: 0.875rem;
+      padding-top: 2rem;
+      border-top: 1px solid var(--border-color);
+    }
+
+    .toast {
+      position: fixed;
+      bottom: 2rem;
+      right: 2rem;
+      background-color: var(--success-color);
+      color: white;
+      padding: 0.75rem 1.5rem;
+      border-radius: 0.5rem;
+      font-weight: 500;
+      opacity: 0;
+      transform: translateY(1rem);
+      transition: all 0.3s ease;
+      pointer-events: none;
+    }
+
+    .toast.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .static-badge {
+      display: inline-block;
+      background-color: var(--success-color);
+      color: white;
+      padding: 0.25rem 0.75rem;
+      border-radius: 1rem;
+      font-size: 0.75rem;
+      margin-left: 0.5rem;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>CSS Normalizer <span class="static-badge">Static</span></h1>
+      <p class="subtitle">
+        Explode shorthand properties, add default values, add units, and beautify output • 
+        <a href="https://kanonsand.github.io/css2kobweb/" target="_blank" rel="noopener noreferrer" style="color: var(--accent-color); text-decoration: none;">推荐: CSS to Kobweb</a>
+      </p>
+    </header>
+
+    <div class="options">
+      <div class="option-group">
+        <input type="checkbox" id="explode" checked onchange="convert()">
+        <label for="explode">Explode Shorthands</label>
+      </div>
+      <div class="option-group">
+        <input type="checkbox" id="addDefaults" checked onchange="convert()">
+        <label for="addDefaults">Add Defaults</label>
+      </div>
+      <div class="option-group">
+        <input type="checkbox" id="addUnits" checked onchange="convert()">
+        <label for="addUnits">Add Units</label>
+      </div>
+      <div class="option-group">
+        <input type="checkbox" id="beautify" checked onchange="convert()">
+        <label for="beautify">Beautify Output</label>
+      </div>
+      <div class="ignore-input">
+        <input type="text" id="ignoreProps" placeholder="Ignore props (comma separated)" oninput="convert()">
+      </div>
+    </div>
+
+    <div class="editor-container">
+      <div class="editor">
+        <div class="editor-header">
+          <span class="editor-title">Input CSS</span>
+          <div class="editor-actions">
+            <button class="btn btn-secondary" onclick="loadSample()">Load Sample</button>
+            <button class="btn btn-secondary" onclick="clearInput()">Clear</button>
+          </div>
+        </div>
+        <textarea id="input" placeholder="Paste your CSS here..." oninput="convert()"></textarea>
+      </div>
+
+      <div class="editor">
+        <div class="editor-header">
+          <span class="editor-title">Output CSS</span>
+          <div class="editor-actions">
+            <button class="btn btn-copy" onclick="copyOutput()">Copy</button>
+          </div>
+        </div>
+        <textarea id="output" readonly placeholder="Converted CSS will appear here..."></textarea>
+      </div>
+    </div>
+
+    <div class="stats" id="stats" style="display: none;">
+      <div class="stat-item">
+        <div class="stat-label">Original Length</div>
+        <div class="stat-value" id="originalLength">0</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-label">Converted Length</div>
+        <div class="stat-value" id="convertedLength">0</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-label">Change</div>
+        <div class="stat-value" id="change">0%</div>
+      </div>
+    </div>
+
+<footer>
+      <p>Powered by postcss-normalize-tool</p>
+    </footer>
+  </div>
+
+  <div class="toast" id="toast">Copied to clipboard!</div>
+
+  <script src="dist.js"></script>
+  <script>
+    function convert() {
+      const input = document.getElementById('input').value;
+      const explode = document.getElementById('explode').checked;
+      const addDefaults = document.getElementById('addDefaults').checked;
+      const addUnits = document.getElementById('addUnits').checked;
+      const beautify = document.getElementById('beautify').checked;
+      const ignoreInput = document.getElementById('ignoreProps').value;
+      const ignoreProps = ignoreInput ? ignoreInput.split(',') : [];
+
+      if (!input.trim()) {
+        document.getElementById('output').value = 'Please enter some CSS to convert.';
+        return;
+      }
+
+      // Default options: addUnits and beautify are always enabled by default
+      const result = PostCSSNormalizeTool.process(input, {
+        explode: explode,
+        addDefaults: addDefaults,
+        addDefaultsOptions: { ignore: ignoreProps },
+        addUnits: addUnits,
+        addUnitsOptions: { ignore: ignoreProps },
+        beautify: beautify
+      });
+
+      document.getElementById('output').value = result.css;
+
+      // Update stats - calculate by lines
+      const originalLines = input.trim() ? input.trim().split('\n').length : 0;
+      const convertedLines = result.css.trim() ? result.css.trim().split('\n').length : 0;
+      const change = originalLines > 0 ? ((convertedLines - originalLines) / originalLines * 100).toFixed(1) : 0;
+
+      document.getElementById('originalLength').textContent = originalLines;
+      document.getElementById('convertedLength').textContent = convertedLines;
+      document.getElementById('change').textContent = `${change > 0 ? '+' : ''}${change}%`;
+      document.getElementById('change').style.color = change > 0 ? '#10b981' : change < 0 ? '#ef4444' : '#6366f1';
+      document.getElementById('stats').style.display = 'flex';
+    }
+
+    function loadSample() {
+      const sampleCSS = `.box {
+  margin: 10px 20px;
+  padding: 5px;
+  border: 1px solid red;
+  animation: fade 2s;
+  transition: opacity 0.3s;
+  box-shadow: 5px 5px;
+  flex: 1;
+  gap: 10px;
+}
+
+.container {
+  margin: 0 auto;
+  padding: 20px;
+  border: 2px dashed #ccc;
+  animation: slideIn;
+  transition: all 0.5s;
+  box-shadow: 0 2px 10px;
+  flex: 0 0 300px;
+  gap: 15px 20px;
+}`;
+      document.getElementById('input').value = sampleCSS;
+      convert();
+    }
+
+    function clearInput() {
+      document.getElementById('input').value = '';
+      document.getElementById('output').value = '';
+      document.getElementById('stats').style.display = 'none';
+    }
+
+    function copyOutput() {
+      const output = document.getElementById('output').value;
+      if (!output) {
+        return;
+      }
+
+      navigator.clipboard.writeText(output).then(() => {
+        const toast = document.getElementById('toast');
+        toast.classList.add('show');
+        setTimeout(() => {
+          toast.classList.remove('show');
+        }, 2000);
+      });
+    }
+  </script>
+</body>
+</html>
